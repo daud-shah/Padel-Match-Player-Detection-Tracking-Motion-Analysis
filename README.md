@@ -22,16 +22,15 @@ A computer vision system that detects and tracks players in **padel match videos
 ## 🛠️ Installation
 
 1. **Clone the repository**:
-   ```bash
+
    git clone https://github.com/yourusername/padel-player-tracking.git
    cd padel-player-tracking
-````
+
 
 2. **Install dependencies**:
 
-   ```bash
    pip install ultralytics<=8.3.40 deep-sort-realtime opencv-python supervision roboflow
-   ```
+   
 
 3. **Download model weights**:
 
@@ -43,9 +42,9 @@ A computer vision system that detects and tracks players in **padel match videos
 
 ### Process a padel match video:
 
-```bash
+
 python track_players.py --input match.mp4 --output output.mp4
-```
+
 
 ### Optional arguments:
 
@@ -71,7 +70,7 @@ results[0].show()  # Show bounding boxes
 
 ## 📂 Project Structure
 
-```
+
 padel-player-tracking/
 ├── track_players.py      # Main video processing script
 ├── best.pt               # Trained YOLOv8 model
@@ -79,7 +78,7 @@ padel-player-tracking/
 ├── output/               # Annotated result videos
 ├── utils/                # Helper functions
 └── README.md             # Project documentation
-```
+
 
 ---
 
