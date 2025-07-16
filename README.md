@@ -1,115 +1,149 @@
 # 🎾 Padel Match Player Detection, Tracking & Motion Analysis
 
-This project focuses on detecting and tracking players in a **padel match** using **YOLOv8/YOLOv11** for object detection and **Deep SORT** for multi-object tracking. It also lays the groundwork for future **motion analysis** such as player speed, movement paths, and heatmaps.
+![Python](https://img.shields.io/badge/Python-3.11+-blue)
+![YOLO](https://img.shields.io/badge/YOLO-Ultralytics-red)
+![OpenCV](https://img.shields.io/badge/OpenCV-4.5+-orange)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+
+A computer vision system that detects and tracks players in **padel match videos** using YOLOv8 and Deep SORT. The system supports real-time detection, unique player ID tracking, and sets the foundation for motion analytics like speed and movement heatmaps.
 
 ---
 
-## 📌 Project Highlights
+## 🌟 Features
 
-- 🎯 **Objective**: Detect and track padel players in match videos for sports analytics.
-- ⚙️ **Technologies**: YOLOv11, Deep SORT, OpenCV, Roboflow
-- 📹 **Input**: Custom-labeled video dataset of padel matches
-- 🧠 **Output**: Real-time player detection & tracking with bounding boxes and player IDs
-
----
-
-## 🚀 Tech Stack
-
-| Component       | Tool/Library             |
-|----------------|--------------------------|
-| Object Detection | YOLOv8 / YOLOv11 (Ultralytics) |
-| Tracking         | Deep SORT (Real-time)   |
-| Data Annotation  | Roboflow                |
-| Visualization    | OpenCV, Supervision     |
-| Notebook         | Jupyter / Kaggle        |
+- ⚡ Real-time **player detection** with YOLOv8/YOLOv11
+- 🛰️ Multi-object tracking using **Deep SORT**
+- 📈 Motion tracking for movement analysis
+- 🎥 Video input/output with bounding box overlays
+- 📦 Easy integration with Roboflow datasets
 
 ---
 
-## 📂 Folder Structure
+## 🛠️ Installation
 
-```
-
-📁 padel-match-tracking/
-├── 📜 padel-player-detection.ipynb
-├── 📁 dataset/
-│   └── data.yaml, train/images, ...
-├── 📁 runs/
-│   └── train results, model weights
-├── 📽️ input\_video.mp4
-├── 📽️ output\_tracked\_video.avi
-└── 📜 README.md
-
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/yourusername/padel-player-tracking.git
+   cd padel-player-tracking
 ````
 
+2. **Install dependencies**:
+
+   ```bash
+   pip install ultralytics<=8.3.40 deep-sort-realtime opencv-python supervision roboflow
+   ```
+
+3. **Download model weights**:
+
+   * Add your trained YOLO weights (`best.pt`) in the project root
+
 ---
 
-## 🔧 Installation
+## 🚀 Usage
+
+### Process a padel match video:
 
 ```bash
-pip install -U ultralytics deep-sort-realtime opencv-python roboflow supervision
-````
+python track_players.py --input match.mp4 --output output.mp4
+```
 
----
+### Optional arguments:
 
-## 🧪 Training YOLO Model
+* `--model`: Path to custom YOLO weights (`best.pt`)
+* `--conf`: Confidence threshold (default: 0.25)
+* `--device`: Use `0` for GPU or `'cpu'` for CPU
 
-```bash
-yolo task=detect mode=train model=yolo11s.pt data="path/to/data.yaml" epochs=50 imgsz=640 batch=16
+### Example code:
+
+```python
+from ultralytics import YOLO
+from deep_sort_realtime.deepsort_tracker import DeepSort
+
+# Load YOLOv8 model
+model = YOLO("best.pt")
+
+# Run inference
+results = model("padel_frame.jpg", conf=0.25)
+results[0].show()  # Show bounding boxes
 ```
 
 ---
 
-## 🛰️ Tracking with Deep SORT
+## 📂 Project Structure
 
-Use Deep SORT with your YOLO detection output to track players frame-by-frame. The final output overlays bounding boxes and unique IDs for each player.
-
----
-
-## 📊 Future Work
-
-* Calculate **motion paths** of each player
-* Generate **heatmaps** and **player speed**
-* Build a **dashboard** for sports analytics
-
----
-
-## 📽️ Demo
-
-> [🎥 View Demo](#)
-
----
-
-## 🤝 Let's Connect
-
-If you’re interested in similar projects or need help with computer vision tasks like:
-
-* Object Detection
-* Player Tracking
-* Custom Model Training
-
-Feel free to connect with me on [LinkedIn]([https://www.linkedin.com/in/yourprofile](https://www.linkedin.com/in/daud-shah40))!
-
----
-
-## 📌 License
-
-MIT License
-
----
-
-## 💬 Credits
-
-* [Ultralytics YOLOv8](https://github.com/ultralytics/ultralytics)
-* [Deep SORT](https://github.com/mikel-brostrom/Yolov5_DeepSort_Pytorch)
-* [Roboflow](https://roboflow.com/)
-
+```
+padel-player-tracking/
+├── track_players.py      # Main video processing script
+├── best.pt               # Trained YOLOv8 model
+├── input/                # Raw input match videos
+├── output/               # Annotated result videos
+├── utils/                # Helper functions
+└── README.md             # Project documentation
 ```
 
 ---
 
-Would you like me to:
-- Customize this with your GitHub username and links?
-- Help you design a project **thumbnail** for the repo?
+## 🧠 Detection Classes
 
-Let me know if you want to upload this to GitHub together.
-```
+| Class ID | Class Name | Description      |
+| -------- | ---------- | ---------------- |
+| 0        | Player     | Padel player     |
+| 1        | Ball       | (Optional class) |
+
+*Tracking is applied per player using Deep SORT, with unique ID for each.*
+
+---
+
+## ⚙️ System Pipeline
+
+1. Extract video frames using OpenCV
+2. Perform YOLOv8 detection on each frame
+3. Pass detections to Deep SORT tracker
+4. Draw bounding boxes with player ID
+5. Write annotated frames to output video
+
+---
+
+## 🎯 Applications
+
+* Sports Analytics & Strategy
+* Player Movement Visualization
+* Broadcast Enhancements
+* Motion Heatmap & Speed Estimation *(coming soon)*
+
+---
+
+## 📈 Future Improvements
+
+* [ ] Speed & Distance Analysis per Player
+* [ ] Heatmap Generation
+* [ ] Integration with Streamlit for UI
+* [ ] Web Dashboard for Match Stats
+* [ ] Referee Assistance System
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/new-feature`)
+3. Commit your changes (`git commit -m 'Add new tracking logic'`)
+4. Push to your branch (`git push origin feature/new-feature`)
+5. Open a Pull Request
+
+---
+
+## 📜 License
+
+Distributed under the MIT License. See `LICENSE` for details.
+
+---
+
+## 🔗 Connect with Me
+
+* 💼 [LinkedIn](https://www.linkedin.com/in/daud-shah40)
+* 🧠 AI Projects: [GitHub Portfolio](https://github.com/daud-shah)
+
+---
+
+> *“Detecting and tracking every move – one frame at a time.”*
